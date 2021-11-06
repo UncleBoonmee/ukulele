@@ -10,5 +10,5 @@ class BotProps(
         var database: String = "./database",
         var game: String = "",
         var trackDurationLimit: Int = 0,
-        var idleTimeMinutes: Int = 10
+        var idleTimeMinutes: Int = 0
 )
