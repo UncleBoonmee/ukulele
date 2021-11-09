@@ -22,13 +22,13 @@ import java.nio.ByteBuffer
 class Player(
         private val beans: Beans,
         guildProperties: GuildProperties,
-        private val leaveOnIdleService: LeaveOnIdleService,
         private val guild: Guild
 ) : AudioEventAdapter(), AudioSendHandler {
     @Component
     class Beans(
             val apm: AudioPlayerManager,
-            val guildProperties: GuildPropertiesService
+            val guildProperties: GuildPropertiesService,
+            val leaveOnIdleService: LeaveOnIdleService
     )
 
     private val guildId = guildProperties.guildId
@@ -125,8 +125,7 @@ class Player(
 
     override fun onTrackStart(player: AudioPlayer?, track: AudioTrack?) {
         log.debug("onTrackStart called for player in guild {}", guild.idLong)
-        // handle idle timer cleanup
-        leaveOnIdleService.maybeDestroyTimer(guild)
+        beans.leaveOnIdleService.destroyTimer(guild)
     }
 
     override fun onTrackEnd(player: AudioPlayer, track: AudioTrack, endReason: AudioTrackEndReason) {
@@ -140,8 +139,7 @@ class Player(
         }
 
         if (remainingDuration <= 0) {
-            // if remainingDuration is 0, there is nothing playing. handle idle timer creation
-            leaveOnIdleService.maybeCreateTimer(guild)
+            beans.leaveOnIdleService.onQueueEmpty(guild)
         }
     }
 
