@@ -5,4 +5,5 @@ config:
   database: "./database" # Database filename
   game: ""               # Status message shown when your bot is online
   trackDurationLimit: 0  # Maximum limit of track duration in minutes. Set to 0 for unlimited
+  idleTimeMinutes: 1     # Time in minutes that the bot will be idle before leaving voice channel
   announceTrack: false   # Announce the start of a track
